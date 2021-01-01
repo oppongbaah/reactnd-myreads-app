@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ShelfChanger from './ShelfChanger';
-import noCover from '../images/no-cover-image.png';
+import noCover from '../assets/images/no-cover-image.png';
 
 const Book = props => {
   const { book, books, changeShelf } = props;

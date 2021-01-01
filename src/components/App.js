@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import * as BooksAPI from '../assets/BooksAPI';
-import '../css/App.css';
+import * as BooksAPI from '../assets/data/BooksAPI';
+import '../assets/styles/App.css';
 import BookList from './BookList';
 import { Link } from 'react-router-dom';
 import Search from './Search';
