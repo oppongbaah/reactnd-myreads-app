@@ -1,3 +1,6 @@
+# References
+Inspiration for this work was taking from https://github.com/sarah-maris/reactnd-project-myreads.git.
+
 ## How to Load the App
 
 The project uses Node.js and the Create-React-App starter. You can download the current version of node here: [Node.js](https://nodejs.org/en/)
