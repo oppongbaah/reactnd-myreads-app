@@ -29,4 +29,4 @@ A new browser window should automatically open displaying the app. If it doesn't
 - To add new books, click on the green + button at the bottom of the page.
   Enter an author's name or subject. Up to 20 items will be returned.
 
-_Note: The backend API is limited to a fixed set of [search terms](#search-terms) -- see the SEARCH_TERMS.md for valid search options_
+_Note: The backend API is limited to a fixed set of search terms -- see the SEARCH_TERMS.md for valid search options_
