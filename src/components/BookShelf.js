@@ -1,29 +1,34 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Book from './Book';
+import SelectButton from './SelectBtn';
 
-class BookShelf extends Component {
-  static propTypes = {
-    books: PropTypes.array.isRequired,
-    changeShelf: PropTypes.func.isRequired
-  };
-
-  render() {
-    const { books, changeShelf } = this.props;
-
-    return (
-      <ol className="books-grid">
-        {books.map(book => (
-          <Book
-            book={book}
-            books={books}
-            key={book.id}
-            changeShelf={changeShelf}
-          />
-        ))}
-      </ol>
-    );
-  }
+function bookShelf(props) {
+  return (
+    <div className="list-books-content">
+      <div className="bookshelf">
+        <h2 className="bookshelf-title"> {props.shelfTitle} </h2>
+        <div className="bookshelf-books">
+          <ol className="books-grid">
+            {
+              props.allBooks
+              .filter(book => book.shelf === props.shelfID)
+              .map(readBook => (
+                 <li key={readBook.authors}>
+                   <div className="book">
+                     <div className="book-top">
+                       <div className="book-cover" style={{ width: 128, height: 193,
+                           backgroundImage: `url(${readBook.imageLinks.smallThumbnail})` }}></div>
+                       <SelectButton></SelectButton>
+                     </div>
+                     <div className="book-title">{readBook.title}</div>
+                     <div className="book-authors">{readBook.authors}</div>
+                   </div>
+                 </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default BookShelf;
+export default bookShelf;
