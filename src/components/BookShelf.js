@@ -1,6 +1,16 @@
 import SelectButton from './SelectBtn';
 
 function bookShelf(props) {
+
+  for(let book of props.allBooks) {
+    if(!book.hasOwnProperty('imageLinks')){
+      book.imageLinks = {
+        smallThumbnail: '',
+        thumbnail: ''
+      };
+    }
+  }
+
   return (
     <div className="list-books-content">
       <div className="bookshelf">

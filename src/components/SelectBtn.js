@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import * as BooksAPI from '../data/BooksAPI';
+import PropTypes from 'prop-types';
 
 class selectBtn extends Component {
 
@@ -11,21 +12,26 @@ class selectBtn extends Component {
     this.defaultVal = 'none';
   }
 
+  static propTypes = {
+    allBooks: PropTypes.array.isRequired,
+    book: PropTypes.object.isRequired,
+    onShelfChange: PropTypes.func.isRequired
+  };
+
   updateBookShelf = (e) => {
-    if(this.book.shelf){
+    if(this.book.hasOwnProperty('shelf')){
       this.onShelfChange(this.book, e.target.value);
     }
     else {
       // get that particualr book and add the shelf property
       BooksAPI.get(this.book.id).then(book => {
-        book.shelf = "";
         this.onShelfChange(book, e.target.value);
       })
     }
   }
 
-  getDefaultValue = () => {
-    if(this.book.shelf) {
+  getDefaultValue = (e) => {
+    if(this.book.hasOwnProperty('shelf')) {
       for (let item of this.allBooks){
         if (item.id === this.book.id) {
           this.defaultVal = item.shelf;
