@@ -4,6 +4,7 @@ import CurrentReading from './CurrentReading';
 import WantToRead from './WantToRead';
 import * as BooksAPI from '../data/BooksAPI';
 import Loading from './Loading';
+import SearchButton from './SearchBtn';
 
 class homePage extends Component {
   // object variables
@@ -21,7 +22,23 @@ class homePage extends Component {
   // states
   state = {
     books: []
+  };
+  seachTitle = "Searcch a book";
+
+  componentDidMount() {
+    this._isMounted = true;
+    this.getAllBooks();
   }
+
+  componentDidUpdate() {
+    this._isUpdated = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    this._isUpdated = false;
+  }
+
   // functions
   getAllBooks = () => {
     BooksAPI.getAll()
@@ -32,33 +49,46 @@ class homePage extends Component {
     })
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-    this.getAllBooks();
+  rotateBookShelf = (bookToMove, shelf) => {
+    BooksAPI.update(bookToMove, shelf)
+    .then( (req, res) => {
+      bookToMove.shelf = shelf;
+      this.setState(prevState => (
+        {
+          books: prevState.books.filter(book => (
+            book.id !== bookToMove.id
+          )).concat(bookToMove)
+        }
+      ))
+    });
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
+  showSearchPage = () => {
+    // alert('Hel');
   }
 
   render(){
-    //
     const {books} = this.state;
-    //
     if(this._isMounted) {
-      console.log(books);
       return (
         <>
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1> {this.appTitle} </h1>
+          <SearchButton searchTitle={this.searchTitle}
+            onSearchBtnClicked={this.showSearchPage}>
+          </SearchButton>
+          <div className="list-books">
+            <div className="list-books-title">
+              <h1> {this.appTitle} </h1>
+            </div>
+            <CurrentReading allBooks={books} shelfTitle={this.shelfTitles.currentlyReading}
+              shelfID={this.shelfIDs.currentlyReading} onShelfChange={this.rotateBookShelf}>
+            </CurrentReading>
+            <WantToRead allBooks={books} shelfTitle={this.shelfTitles.wantToRead}
+              shelfID={this.shelfIDs.wantToRead} onShelfChange={this.rotateBookShelf}>
+            </WantToRead>
+            <Read allBooks={books} shelfTitle={this.shelfTitles.read}
+              shelfID={this.shelfIDs.read} onShelfChange={this.rotateBookShelf}>
+            </Read>
           </div>
-          <CurrentReading allBooks={books} shelfTitle={this.shelfTitles.currentlyReading}
-            shelfID={this.shelfIDs.currentlyReading}></CurrentReading>
-          <WantToRead allBooks={books} shelfTitle={this.shelfTitles.wantToRead}
-            shelfID={this.shelfIDs.wantToRead}></WantToRead>
-          <Read allBooks={books} shelfTitle={this.shelfTitles.read} shelfID={this.shelfIDs.read}></Read>
-        </div>
         </>
       )
     }

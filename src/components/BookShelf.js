@@ -10,16 +10,19 @@ function bookShelf(props) {
             {
               props.allBooks
               .filter(book => book.shelf === props.shelfID)
-              .map(readBook => (
-                 <li key={readBook.authors}>
+              .map(filteredBook => (
+                 <li key={filteredBook.authors}>
                    <div className="book">
                      <div className="book-top">
-                       <div className="book-cover" style={{ width: 128, height: 193,
-                           backgroundImage: `url(${readBook.imageLinks.smallThumbnail})` }}></div>
-                       <SelectButton></SelectButton>
+                        <div className="book-cover" style={{ width: 128, height: 193,
+                           backgroundImage: `url(${filteredBook.imageLinks.smallThumbnail})` }}>
+                        </div>
+                        <SelectButton allBooks={props.allBooks} book={filteredBook}
+                          onShelfChange={props.onShelfChange}>
+                        </SelectButton>
                      </div>
-                     <div className="book-title">{readBook.title}</div>
-                     <div className="book-authors">{readBook.authors}</div>
+                     <div className="book-title">{filteredBook.title}</div>
+                     <div className="book-authors">{filteredBook.authors}</div>
                    </div>
                  </li>
               ))

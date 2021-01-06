@@ -9,16 +9,16 @@ class App extends Component{
 
   render() {
     return (
-      <>
-      <Router>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route exact path="/search" component={Search}/>
-          </Switch>
-        </Suspense>
-      </Router>
-      </>
+      <div className="app">
+        <Router>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Switch>
+              <Route exact path="/" component={Home}/>
+              <Route path="/search" component={Search}/>
+            </Switch>
+          </Suspense>
+        </Router>
+    </div>
     )
   }
 }
