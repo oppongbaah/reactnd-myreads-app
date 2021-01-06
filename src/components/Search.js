@@ -22,6 +22,15 @@ class search extends Component {
       BooksAPI.search(this.state.queryString.trim())
       .then(books => {
         if(books.length > 0){
+          for(let book of books) {
+            if(!book.hasOwnProperty('imageLinks')){
+              book.imageLinks = {
+                smallThumbnail: '',
+                thumbnail: ''
+              };
+              console.log(book);
+            }
+          }
           this.setState( { booksRetrieved: books, errorOnSearch: false} )
         }
         else {
@@ -30,7 +39,6 @@ class search extends Component {
       })
       .catch(e => {
         this.setState( { booksRetrieved: [] } );
-        console.log(e);
       })
     }
   }

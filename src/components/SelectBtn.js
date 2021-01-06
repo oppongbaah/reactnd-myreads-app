@@ -8,7 +8,7 @@ class selectBtn extends Component {
     this.allBooks = props.allBooks;
     this.book = props.book;
     this.onShelfChange = props.onShelfChange;
-    this.defaultVal = 'move';
+    this.defaultVal = 'none';
   }
 
   updateBookShelf = (e) => {
