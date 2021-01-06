@@ -27,12 +27,12 @@ A new browser window should automatically open displaying the app. If it doesn't
 
 - Books are sorted into three categories: Currently Reading, Want to Read and Read
 - To change a book's category or remove a book from the list, click on the green button on the book cover
-![Load Screen](src/assets/images/mainPage.png "load screen")
+![Load Screen](src/images/home.png "load screen")
 
 
 - To add new books, click on the green + button at the bottom of the page.
   Enter an author's name or subject. Up to 20 items will be returned.
-  ![Change menu](src/assets/images/buttonView.png "change")
+  ![Change menu](src/images/selectBtn.png "change")
 
 _Note: The backend API is limited to a fixed set of search terms -- see the SEARCH_TERMS.md for valid search options_
-![Search Screen](src/assets/images/searchPage.png "search")
+![Search Screen](src/images/search.png "search")
