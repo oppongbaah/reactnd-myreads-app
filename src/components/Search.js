@@ -5,74 +5,62 @@ import SelectButton from './SelectBtn';
 
 class search extends Component {
 
-  constructor(props){
-    super(props);
-
-    this.state = {
-      query: '',
-      queryString: '',
-      booksRetrieved: [],
-      errorOnSearch: false,
-    }
+  state = {
+    retrievedBooks: [],
+    query: '',
+    errorOnSearch: false
   }
 
   updateQueryState = (_event) => {
-    _event.preventDefault();
-    this.state.queryString = _event.target.value;
-    this.setState( { query:  _event.target.value})
+    this.setState( { query:  _event.target.value}, this.retrieveBooks)
   }
 
   retrieveBooks = (_event) => {
-    this.updateQueryState(_event);
-    BooksAPI.search(this.state.queryString.trim())
-    .then(books => {
-      if(books.length > 0){
-        for(let book of books) {
-          if(!book.hasOwnProperty('imageLinks')){
-            book.imageLinks = {
-              smallThumbnail: '',
-              thumbnail: ''
-            };
+    if(this.state.query){
+      BooksAPI.search(this.state.query.trim())
+      .then(newBooks => {
+        if(newBooks.length > 0){
+          for(let book of newBooks) {
+            if(!book.hasOwnProperty('imageLinks')){
+              book.imageLinks = {
+                smallThumbnail: '',
+                thumbnail: ''
+              };
+            }
+            // check for title as well
+            if(!book.hasOwnProperty('title')){
+              book.title = 'No book Title'
+            }
           }
+          this.setState( { retrievedBooks: newBooks, errorOnSearch: false} )
         }
-        this.setState( { booksRetrieved: books, errorOnSearch: false} )
-      }
-      else {
-        this.setState( { booksRetrieved: books, errorOnSearch: true} )
-      }
-    })
-    .catch(e => {
-      this.setState( { booksRetrieved: [] } );
-    })
+        else {
+          this.setState( { retrievedBooks: [], errorOnSearch: true} )
+        }
+      })
+      .catch(e => {})
+    }
   }
 
   searchBooks = (e) => {
-    this.retrieveBooks(e);
-  }
-
-  rotateBookShelf = (bookToMove, shelf) => {
-    BooksAPI.update(bookToMove, shelf)
-    .then( (req, res) => {
-      bookToMove.shelf = shelf;
-      this.setState(prevState => (
-        {
-          booksRetrieved: prevState.booksRetrieved.filter(book => (
-            book.id !== bookToMove.id
-          )).concat(bookToMove)
-        }
-      ))
-    });
+    this.updateQueryState(e);
   }
 
   render() {
-    const {query, booksRetrieved, errorOnSearch} = this.state;
+    const {retrievedBooks, query, errorOnSearch} = this.state;
 
-    for(let book of this.state.booksRetrieved) {
-      if(!book.hasOwnProperty('imageLinks')){
-        book.imageLinks = {
-          smallThumbnail: '',
-          thumbnail: ''
-        };
+    if(!errorOnSearch){
+      for(let book of retrievedBooks) {
+        if(!book.hasOwnProperty('imageLinks')){
+          book.imageLinks = {
+            smallThumbnail: '',
+            thumbnail: ''
+          };
+        }
+        // check for title as well
+        if(!book.hasOwnProperty('title')){
+          book.title = 'No book Title'
+        }
       }
     }
 
@@ -82,25 +70,25 @@ class search extends Component {
             <Link className="close-search" to="/" ></Link>
             <div className="search-books-input-wrapper">
               <input type="text" placeholder="Search by title or author"
-                value={query} onChange={this.searchBooks}/>
+                value={query}  onChange={this.searchBooks.bind(this)}/>
             </div>
           </div>
           <div className="search-books-results">
           {
-            !errorOnSearch && (
+            (!errorOnSearch & query.trim() !== '')  ? (
               <div>
-                <h3>Search returned {booksRetrieved.length} books </h3>
+                <h3>Search returned {retrievedBooks.length} books </h3>
                 <ol className="books-grid">
                   {
-                    booksRetrieved.map(book => (
+                    retrievedBooks.map(book => (
                       <li key={book.id}>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193,
                                 backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}>
                             </div>
-                            <SelectButton allBooks={booksRetrieved} book={book}
-                              onShelfChange={this.rotateBookShelf}>
+                            <SelectButton allBooks={this.props.books}
+                              onShelfChange={this.props.rotateShelf} book={book}>
                             </SelectButton>
                           </div>
                           <div className="book-title">{book.title}</div>
@@ -111,11 +99,11 @@ class search extends Component {
                   }
                 </ol>
               </div>
-            )}
+            ): null }
             {
-              errorOnSearch && (
+              errorOnSearch ? (
               <h3>Search did not return any books. Please try again!</h3>
-              )
+              ) : null
             }
           </div>
       </div>

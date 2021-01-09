@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import * as BooksAPI from '../data/BooksAPI';
 import PropTypes from 'prop-types';
 
 class selectBtn extends Component {
@@ -9,36 +8,26 @@ class selectBtn extends Component {
     this.allBooks = props.allBooks;
     this.book = props.book;
     this.onShelfChange = props.onShelfChange;
-    this.defaultVal = 'none';
   }
 
-  static propTypes = {
-    allBooks: PropTypes.array.isRequired,
-    book: PropTypes.object.isRequired,
-    onShelfChange: PropTypes.func.isRequired
-  };
+  componentDidMount(){
+    // this.getDefaultValue();
+  }
 
   updateBookShelf = (e) => {
-    if(this.book.hasOwnProperty('shelf')){
-      this.onShelfChange(this.book, e.target.value);
-    }
-    else {
-      // get that particualr book and add the shelf property
-      BooksAPI.get(this.book.id).then(book => {
-        this.onShelfChange(book, e.target.value);
-      })
-    }
+    this.onShelfChange(this.book, e.target.value);
   }
 
   getDefaultValue = (e) => {
-    if(this.book.hasOwnProperty('shelf')) {
-      for (let item of this.allBooks){
-        if (item.id === this.book.id) {
-          this.defaultVal = item.shelf;
-          break;
-        }
+    this.defaultVal = 'none';
+
+    for (let item of this.allBooks){
+      if (item.id === this.book.id) {
+        this.defaultVal = item.shelf;
+        break;
       }
     }
+
   }
 
   render() {
@@ -55,6 +44,12 @@ class selectBtn extends Component {
       </div>
     )
   }
+
+  static propTypes = {
+    allBooks: PropTypes.array.isRequired,
+    book: PropTypes.object,
+    onShelfChange: PropTypes.func.isRequired
+  };
 }
 
 export default selectBtn;

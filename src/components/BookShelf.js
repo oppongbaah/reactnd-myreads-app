@@ -21,7 +21,7 @@ function bookShelf(props) {
               props.allBooks
               .filter(book => book.shelf === props.shelfID)
               .map(filteredBook => (
-                 <li key={filteredBook.authors}>
+                 <li key={filteredBook.id}>
                    <div className="book">
                      <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 193,
